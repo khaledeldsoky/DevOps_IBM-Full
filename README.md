@@ -10,6 +10,7 @@ flowchart LR
     GitHubRepo --> K8s[Kubernetes]
     GitHubRepo --> CICD[CI/CD Pipelines]
     GitHubRepo --> IaC[Infrastructure as Code]
+    GitHubRepo --> Monitoring[Monitoring & Logging]
 
 
     Docker --> K8s
