@@ -16,7 +16,7 @@ flowchart LR
     Git --> CICD
     CICD --> Docker
     IaC --> K8s
-
+    K8s --> Monitoring
 
 
 ✅ This will render as a **real visual diagram on GitHub**.
