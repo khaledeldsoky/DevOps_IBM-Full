@@ -1,7 +1,7 @@
 ---
-- name: Install packages needed 
+- name: Install packages needed
   ansible.builtin.apt:
-    name:  
+    name:
       - apt-transport-https
       - ca-certificates
       - curl
@@ -11,7 +11,7 @@
   ansible.builtin.file:
     path: /etc/apt/keyrings
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Download the public signing key
   ansible.builtin.apt_key:
@@ -25,8 +25,9 @@
 
 - name: Update  packages
   ansible.builtin.apt:
-    update_cache: yes
-    force: yes
+    update_cache: true
+    force: true
+
 
 - name: Install kubelet, kubeadm and kubectl
   ansible.builtin.apt:
@@ -38,9 +39,10 @@
 - name: Enable the kubelet service before running kubeadm
   ansible.builtin.service:
     name: kubelet
-    enabled: yes
+    enabled: true
 
-# ------- Kube network 
+# ------- Kube network
+
 - name: Enable IPv4 packet forwarding
   ansible.posix.sysctl:
     name: net.ipv4.ip_forward
@@ -50,11 +52,12 @@
     reload: true
 
 - name: Generate default containerd config
-  command: sudo containerd config default
+  ansible.builtin.command: sudo containerd config default
   register: containerd_config
+  changed_when: false
 
 - name: Write containerd config to /etc/containerd/config.toml
-  copy:
+  ansible.builtin.copy:
     content: "{{ containerd_config.stdout }}"
     dest: /etc/containerd/config.toml
     owner: root
@@ -62,13 +65,13 @@
     mode: '0644'
 
 - name: Update SystemdCgroup to true in containerd config
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/containerd/config.toml
     regexp: '^\s*SystemdCgroup\s*=\s*false'
     line: '            SystemdCgroup = true'
     insertafter: '\[plugins\."io\.containerd\.grpc\.v1\.cri"\.containerd\.runtimes\.runc\.options\]'
 
-- name: restart containerd
+- name: Restart containerd
   ansible.builtin.service:
     name: containerd
     state: restarted
@@ -86,13 +89,11 @@
 
 - name: Apply changes to .bashrc
   ansible.builtin.shell: 'source /home/ubuntu/.bashrc'
-  args: 
+  args:
     executable: /bin/bash
+  changed_when: false
 
 # ----------------------- reload Daemon
-- name: reload Daemon
+- name: Reload Daemon
   ansible.builtin.systemd_service:
     daemon_reload: true
-    
-
-
