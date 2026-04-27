@@ -1,5 +1,5 @@
 # ----------- All ----------- #
-# ibmcloud_api_key="QQx5AEEV0EmG40zHX3zzYLpqIPS6pUzAqZtb0S5pg1ry"
+# ibmcloud_api_key="QQx5AEEb0S5pg1ry"
 # ----------- Network ----------- #
 # eu_gb = London
 # eu_de = Frankfurt
